@@ -1,0 +1,61 @@
+buildscript {
+    repositories {
+        jcenter()
+    }
+
+    dependencies {
+        classpath 'com.amazonaws:aws-java-sdk-s3:1.11.179'
+    }
+}
+
+apply plugin: 'java'
+
+repositories {
+    jcenter()
+}
+
+dependencies {
+    compile 'org.slf4j:slf4j-api:1.7.25'
+    compile 'org.apache.commons:commons-email:1.5'
+
+    compile 'com.amazon.alexa:ask-sdk:2.3.1'
+
+    runtime 'ch.qos.logback:logback-classic:1.2.3'
+
+    //testCompile 'junit:junit:4.12'
+}
+
+wrapper {
+  gradleVersion = '4.7'
+}
+
+// Create zip suitable for deployment to Lambda
+task buildZip(type: Zip) {
+    from compileJava
+    from processResources              
+    into('lib') {
+        from configurations.runtime
+    }           
+}
+
+build.dependsOn buildZip
+
+// TODO: task to test lambda invocation with SAM Local
+
+// Copy Lambda deployment zip to S3
+import com.amazonaws.auth.profile.ProfileCredentialsProvider;
+import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.AmazonS3Client;
+import com.amazonaws.services.s3.model.PutObjectRequest;
+task uploadToS3 {
+    File file      = file(buildZip.archivePath)
+    String bucket  = S3_BUCKET
+    String key     = file.name
+    String profile = CREDENTIALS_PROFILE
+
+    doLast {
+        AmazonS3 s3client = new AmazonS3Client(new ProfileCredentialsProvider(profile));
+        s3client.putObject(new PutObjectRequest(bucket, key, file));
+    }
+}
+
