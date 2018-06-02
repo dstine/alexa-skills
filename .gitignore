@@ -1,0 +1,21 @@
+### Code
+
+# directories
+build
+.gradle
+.idea
+
+# file extensions
+*.class
+*.iml
+*.ipr
+*.iws
+*.MF
+
+### Infrastructure
+.terraform
+*.tfstate
+*.tfstate.backup
+*.tfstate.*.backup
+terraform.tfvars
+
