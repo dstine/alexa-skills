@@ -10,6 +10,7 @@ resource "aws_s3_bucket" "alexz_deploy" {
   }
 
   tags {
+    project   = "alexa-skills"
     terraform = "true"
   }
 }

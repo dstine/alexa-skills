@@ -75,6 +75,7 @@ resource "aws_lambda_function" "alexa_run" {
   }
 
   tags {
+    project   = "alexa-skills"
     terraform = "true"
   }
 }
@@ -83,6 +84,7 @@ resource "aws_cloudwatch_log_group" "alexa_run" {
   name = "/aws/lambda/${var.aws_resource_name_run}"
 
   tags {
+    project   = "alexa-skils"
     terraform = "true"
   }
 }
