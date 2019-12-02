@@ -84,7 +84,7 @@ resource "aws_cloudwatch_log_group" "alexa_run" {
   name = "/aws/lambda/${var.aws_resource_name_run}"
 
   tags {
-    project   = "alexa-skils"
+    project   = "alexa-skills"
     terraform = "true"
   }
 }
